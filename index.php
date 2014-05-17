@@ -23,6 +23,7 @@ foreach($listUrl as $key => $href){
 		$html = $curl->getContentCurl();
 		$html = new ParserHtmlDom($html);
 		echo $html->getTextWithContainer("div", null,"principal",0,"h1")."<br />"."\n";
+		echo "<a href='".$html->getUrlVideo()."'>video</a><br />"."\n";
 		echo "Descriptif : " . $html->getTextWithContainer("div", null,"mediadescription",0,"p")."<br /><br />"."\n";
 		$html->clean();
 	// }

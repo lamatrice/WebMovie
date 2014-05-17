@@ -87,6 +87,10 @@ class ParserHtmlDom
 	function getUrlImg($balise, $class, $id){
 		return "";
 	}
+	function getUrlVideo(){
+		return $this->_html->find("div[class=blockContent] ul", 4)->children(1)->children(0)->href;
+		
+	}
 
 	function splitUrl(){
 
