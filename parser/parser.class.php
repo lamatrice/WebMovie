@@ -21,7 +21,8 @@ class ParserHtmlDom
 	* List => si il n'y a qu'un seule titre dans la page $list == false => <string> Sinon Array avec tous les titres
 	*/
 	function getTitle($balise = null, $class = null, $id = null, $child = 0, $list = true){
-		$title = "";
+		$title = null;
+		$option = null;
 		if(!empty($balise)){
 			$option = $balise;
 			if(!empty($class)){
@@ -32,13 +33,41 @@ class ParserHtmlDom
 		}
 
 		if($list == false){
-			return $this->_html->find($option, 0)->children($child)->plaintext;
+			if ($child == 1)
+				return utf8_encode($this->_html->find($option, 0)->children($child)->plaintext);
+			else
+				return utf8_encode($this->_html->find($option, 0)->plaintext);
 		}else{
 			foreach($this->_html->find($option) as $name){
 				$title[] = utf8_encode($name->children($child)->plaintext)."\n";
 			}
 			return $title;
 		}
+	}
+
+	/**
+	* Balise => h1, h2, div etc...
+	* Class => Nom de la class dans la balise
+	* Div => Nom de la div dans la balise
+	* Child => Position de la la balise a dans le conteneur
+	* Contain => Mot qui est contenu dans l'url
+	*/
+	function getListUrl($balise = null, $class = null, $id = null, $child = 0, $contain = null){
+		$href = null;
+		$option = null;
+		if(!empty($balise)){
+			$option = $balise;
+			if(!empty($class)){
+				$option .= '[class='.$class.']';
+			}else if(!empty($id)){
+				$option .= '[id='.$id.']';
+			}
+		}
+		foreach($this->_html->find($option) as $name){
+			if (strpos($name->find("a", $child)->href, $contain) !== false)
+				$href[] = $name->find("a", $child)->href;
+		}
+		return $href;
 	}
 
 	function getText($balise, $class, $id){
