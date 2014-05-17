@@ -64,14 +64,24 @@ class ParserHtmlDom
 			}
 		}
 		foreach($this->_html->find($option) as $name){
-			if (strpos($name->find("a", $child)->href, $contain) !== false)
+			if (strpos($name->find("a", $child)->href, $contain) == false)
 				$href[] = $name->find("a", $child)->href;
 		}
 		return $href;
 	}
 
-	function getText($balise, $class, $id){
-		return "";
+	function getTextWithContainer($baliseContainer = null, $class = null, $id = null, $child = 0, $balise = null){
+		$href = null;
+		$option = null;
+		if(!empty($baliseContainer)){
+			$option = $baliseContainer;
+			if(!empty($class)){
+				$option .= '[class='.$class.']';
+			}else if(!empty($id)){
+				$option .= '[id='.$id.']';
+			}
+		}
+		return utf8_encode($this->_html->find($option." ".$balise, $child)->plaintext);
 	}
 
 	function getUrlImg($balise, $class, $id){
@@ -80,6 +90,11 @@ class ParserHtmlDom
 
 	function splitUrl(){
 
+	}
+
+	function clean(){
+		$this->_html->clear();
+		unset($this->_html);
 	}
 
 	function Init($content){
