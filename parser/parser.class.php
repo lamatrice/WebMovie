@@ -57,15 +57,16 @@ class ParserHtmlDom
 		$option = null;
 		if(!empty($balise)){
 			$option = $balise;
-			if(!empty($class)){
+			if(!empty($class)) {
 				$option .= '[class='.$class.']';
-			}else if(!empty($id)){
+			} else if(!empty($id)) {
 				$option .= '[id='.$id.']';
 			}
 		}
-		foreach($this->_html->find($option) as $name){
-			if (strpos($name->find("a", $child)->href, $contain) == false)
+		foreach($this->_html->find($option) as $key => $name) {
+			if (strpos($name->find("a", $child)->href, $contain) == false){
 				$href[] = $name->find("a", $child)->href;
+			}
 		}
 		return $href;
 	}
@@ -75,9 +76,9 @@ class ParserHtmlDom
 		$option = null;
 		if(!empty($baliseContainer)){
 			$option = $baliseContainer;
-			if(!empty($class)){
+			if(!empty($class)) {
 				$option .= '[class='.$class.']';
-			}else if(!empty($id)){
+			} else if(!empty($id)) {
 				$option .= '[id='.$id.']';
 			}
 		}
@@ -87,9 +88,12 @@ class ParserHtmlDom
 	function getUrlImg($balise, $class, $id){
 		return "";
 	}
-	function getUrlVideo(){
-		return $this->_html->find("div[class=blockContent] ul", 4)->children(1)->children(0)->href;
-		
+	function getUrlVideo($contain){
+		$url = $this->_html->find("div[class=blockContent] ul", 4)->children(1)->children(0)->href;
+		if (strpos($url, $contain) == true)
+			return $url;
+		else
+			return NULL;
 	}
 
 	function splitUrl(){
