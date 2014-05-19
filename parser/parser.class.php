@@ -96,8 +96,14 @@ class ParserHtmlDom
 			return NULL;
 	}
 
-	function splitUrl(){
-
+	function getCategorie($contain){
+		$categorie = array();
+		foreach($this->_html->find('ul[role=menu] li') as $key => $name) {
+			if (strpos($name->children(0)->href, $contain) == true){
+				$categorie[] = $name->children(0)->href."\n";
+			}
+		}
+		return array_unique($categorie);
 	}
 
 	function clean(){
